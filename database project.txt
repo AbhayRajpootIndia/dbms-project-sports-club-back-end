@@ -1,0 +1,215 @@
+create table coaches
+(
+	Coach_id int primary key,
+	C_name varchar(30),
+	sport varchar(20),
+	address varchar(30),
+	phone_no varchar(10),
+	experience int
+);
+
+
+create table teams
+(
+	Team_id int primary key,
+	sport_type varchar(30),
+	rank int,
+	no_of_wins int
+);
+
+
+create table players
+(
+	Player_id int primary key,
+	P_name varchar(30),
+	sport varchar(30),
+	address varchar(30),
+	phone varchar(10),
+	Team_id int,
+	Coach_id int,
+	foreign key(Team_id) references teams(Team_id),
+	foreign key(Coach_id) references coaches(Coach_id)
+);
+
+
+create table tournaments
+(
+	Id int primary key,
+	tournament_name varchar(30),
+	T_date date,
+	venue varchar(30),
+	time varchar(30),
+	sport_type varchar(30),
+	foreign key(Team_id) references teams(team_id)
+);
+
+
+create table equipments
+(
+	E_type varchar(30),
+	E_id int primary key,
+	Player_id int,
+	date_out date,
+	due_date date,
+	foreign key(Player_id) references Players(Player_id)
+);
+
+
+create table court
+(
+	Court_id int primary key,
+	court_type varchar(30)
+);
+
+----------------------------------- insert ----------------------------------------
+
+INSERT INTO COACHES
+VALUES (1001, 'Sachin', 'Cricket', 'Bangalore', '9876543219', 14);
+
+INSERT INTO COACHES
+VALUES (1002, 'Messi', 'Football', 'Bangalore', '8765432198', 10);
+
+INSERT INTO COACHES
+VALUES (1003, 'James', 'Basketball', 'Mysore', '7654321987', 5);
+
+INSERT INTO COACHES
+VALUES (1004, 'Sunil', 'Badminton', 'Bangalore', '6543219876', 11);
+
+INSERT INTO COACHES
+VALUES (1005, 'George', 'Volleyball', 'Bangalore', '5432198765', 12);
+
+
+
+
+INSERT INTO teams
+VALUES (2001, 'Cricket', 1, 5);
+
+INSERT INTO teams
+VALUES (2002, 'Football', 2, 1);
+
+INSERT INTO teams
+VALUES (2003, 'Basketball', 1, 3);
+
+INSERT INTO teams
+VALUES (2004, 'Badminton', 2, 1);
+
+INSERT INTO teams
+VALUES (2005, 'Volleyball', 1, 2);
+
+
+
+INSERT INTO players
+VALUES (3001, 'Ramesh', 'Cricket', 'Bangalore', '1234567890', 2001, 1001);
+
+INSERT INTO players
+VALUES (3002, 'Gopesh', 'Football', 'Mysore', '2134567980', 2002, 1002);
+
+INSERT INTO players
+VALUES (3003, 'Ashveen', 'Basketball', 'Bangalore', '1029384756', 2003, 1003);
+
+INSERT INTO players
+VALUES (3004, 'Radha', 'Badminton', 'Mysore', '2134590687', 2004, 1004);
+
+INSERT INTO players
+VALUES (3005, 'Meena', 'Volleyball', 'Bangalore', '5647382910', 2005, 1005);
+
+
+
+INSERT INTO equipments
+VALUES ('Bat', 4001, 3001, '2023-01-15', '2023-02-15');	
+
+INSERT INTO equipments
+VALUES ('Helmet', 4002, 3002, '2023-01-25', '2023-02-10');	
+
+INSERT INTO equipments
+VALUES ('Football', 4003, 3003, '2023-01-21', '2023-02-20');	
+
+INSERT INTO equipments
+VALUES ('Badminton Racket', 4004, 3004, '2023-01-12', '2023-02-25');	
+
+INSERT INTO equipments
+VALUES ('Basketball', 4005, 3005, '2023-01-28', '2023-02-26');	
+
+
+
+INSERT INTO TOURNAMENTS
+VALUES (5001, 'League1', '2023-02-15', 'shivaji ground', '7:00 AM', 'football', 2002);
+
+INSERT INTO TOURNAMENTS
+VALUES (5002, 'Premier league', '2023-02-18', 'narmada ground', '7:00 AM', 'cricket', 2001);
+
+INSERT INTO TOURNAMENTS
+VALUES (5003, 'Summer league', '2023-02-29', 'ranital stadium', '9:00 AM', 'basketball', 2003);
+
+INSERT INTO TOURNAMENTS
+VALUES (5004, 'Open tournament', '2023-03-05', 'BGI ground', '7:00 AM', 'volleyball', 2005);
+
+INSERT INTO TOURNAMENTS
+VALUES (5005, 'Champions league', '2023-04-11', 'NS complex', '7:00 AM', 'badminton', 2004);
+
+
+INSERT INTO court
+VALUES (1, 'Cricket');
+
+INSERT INTO court
+VALUES (2, 'Cricket');
+
+INSERT INTO court
+VALUES (3, 'Football');
+
+INSERT INTO court
+VALUES (4, 'Football');
+
+INSERT INTO court
+VALUES (5, 'Basketball');
+
+INSERT INTO court 
+VALUES (6, 'Basketball');
+
+INSERT INTO court
+VALUES (7, 'Volleyball');
+
+INSERT INTO court 
+VALUES (8, 'Volleyball');
+
+INSERT INTO court 
+VALUES (9, 'Badminton');
+
+INSERT INTO court 
+VALUES (10, 'Badminton');
+
+
+SELECT * FROM COACHES;
+
+
+------------------------------- TRIGGER -----------------------------------
+
+CREATE TRIGGER increment_insert BEFORE INSERT ON players
+  FOR EACH ROW 
+    SET NEW.Player_id = (SELECT MAX(Player_id) + 1 FROM players);
+
+-------------------------------- STORED PROCEDURE --------------------------------
+
+
+DELIMITER &&
+CREATE PROCEDURE give_coach ()  
+BEGIN  
+      UPDATE players 
+	SET Coach_id=(Select C.Coach_id FROM coaches C, players P WHERE C.sport=P.sport limit 1);
+END &&
+DELIMITER ;
+
+
+--------------------- MINSC --------------------------
+
+UPDATE tournaments SET T_date ='2023-2-14' 
+WHERE tournament_name ='league1';
+
+
+
+
+
+
+CREATE VIEW court_view AS SELECT * from court;
+
+

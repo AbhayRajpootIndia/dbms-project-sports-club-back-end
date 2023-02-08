@@ -38,7 +38,49 @@ function getEquipmentsByPlayerId(req, res) {
     })
 }
 
+function addBorrow(req, res) {
+
+    let E_id = req.body.E_id;
+
+    let Player_id = req.body.Player_id;
+    let date_out = req.body.date_out;
+    let due_date = req.body.due_date;
+
+    let sql = `UPDATE equipments SET Player_id=${Player_id}, date_out='${date_out}', due_date='${due_date}' where E_id=${E_id}`
+
+    if (!Player_id || !date_out || !due_date || !E_id) {
+        return;
+    }
+
+    db.query(sql, (error, result) => {
+        if (error) throw error;
+        console.log(result)
+        res.json(result);
+    })
+}
+
+function removeBorrow(req, res) {
+
+    let E_id = req.body.E_id;
+
+    
+    let sql = `UPDATE equipments SET Player_id=NULL, date_out=NULL, due_date=NULL where E_id=${E_id}`
+
+    if (!E_id) {
+        return;
+    }
+
+    db.query(sql, (error, result) => {
+        if (error) throw error;
+        console.log(result)
+        res.json(result);
+    })
+}
+
+
 module.exports = {
     getEquipments,
-    getEquipmentsByPlayerId
+    getEquipmentsByPlayerId,
+    addBorrow,
+    removeBorrow
 }

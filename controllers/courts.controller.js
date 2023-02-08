@@ -17,7 +17,7 @@ db.connect((error) => {
 })
 
 function getCourts(req, res) {
-    let sql = 'SELECT * FROM court'
+    let sql = 'SELECT * FROM court_view'
 
     db.query(sql, (error, result) => {
         if (error) throw error;

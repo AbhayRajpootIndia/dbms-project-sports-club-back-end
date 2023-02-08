@@ -20,6 +20,8 @@ const equipmentsController = require('./controllers/equipments.controller')
 
 // POST requests
 app.post('/addPlayer', playersController.addPlayer);
+app.post('/addBorrow', equipmentsController.addBorrow);
+app.post('/removeBorrow', equipmentsController.removeBorrow);
 
 // GET requests
 
